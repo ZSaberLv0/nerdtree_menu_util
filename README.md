@@ -45,7 +45,7 @@ default config: `(p)aste yanked/cut node`
 
 copy the full path of current node
 
-default config: `copy path of current (n)ode`
+default config: `copy (n)ode path`
 
 extra config:
 
