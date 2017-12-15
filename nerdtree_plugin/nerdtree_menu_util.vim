@@ -152,6 +152,8 @@ endfunction
 " ============================================================
 " execute
 call s:setupModule('execute', 1, 'e(x)ecute the node', 'x', 'NERDTreeExecuteNode')
+let s:haskdeinit = system("ps -e") =~ 'kdeinit'
+let s:hasdarwin = system("uname -s") =~ 'Darwin'
 function! NERDTreeExecuteNode()
     let l:oldssl=&shellslash
     set noshellslash
