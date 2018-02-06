@@ -32,7 +32,7 @@ endfunction
 " ============================================================
 " yank/cut/paste
 call s:setupModule('yank', 1, '(y)ank the node', 'y', 'NERDTreeYankNode')
-call s:setupModule('cut', 1, 'c(u)t the node', 'u', 'NERDTreeCutNode')
+call s:setupModule('cut', 1, '(x) cut the node', 'x', 'NERDTreeCutNode')
 call s:setupModule('paste', 1, '(p)aste yanked/cut node', 'p', 'NERDTreePasteNode')
 
 let s:nmu_yanked_node = {}
@@ -150,11 +150,11 @@ endfunction
 
 
 " ============================================================
-" execute
-call s:setupModule('execute', 1, 'e(x)ecute the node', 'x', 'NERDTreeExecuteNode')
+" run
+call s:setupModule('run', 1, '(r)un the node', 'r', 'NERDTreeRunNode')
 let s:haskdeinit = system("ps -e") =~ 'kdeinit'
 let s:hasdarwin = system("uname -s") =~ 'Darwin'
-function! NERDTreeExecuteNode()
+function! NERDTreeRunNode()
     let l:oldssl=&shellslash
     set noshellslash
     let treenode = g:NERDTreeFileNode.GetSelected()

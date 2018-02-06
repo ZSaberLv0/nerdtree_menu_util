@@ -33,7 +33,7 @@ default config: `(y)ank the node`
 
 cut the node so that it can be 'paste'
 
-default config: `c(u)t the node`
+default config: `(x) cut the node`
 
 ## paste
 
@@ -54,11 +54,11 @@ extra config:
 let g:nmu_copypath_registers = ['*', '"', '0']
 ```
 
-## execute
+## run
 
-execute the node by system default behavior
+run the node by system default behavior
 
-default config: `e(x)ecute the node`
+default config: `(r)un the node`
 
 ## quit
 
