@@ -60,6 +60,12 @@ run the node by system default behavior
 
 default config: `(r)un the node`
 
+## size
+
+print the file or dir's size
+
+default config: `(s)ize of the node`
+
 ## quit
 
 simply quit the menu

@@ -184,6 +184,23 @@ endfunction
 
 
 " ============================================================
+" size
+call s:setupModule('size', 1, '(s)ize of the node', 's', 'NERDTreeNodeSize')
+function! NERDTreeNodeSize()
+    let treenode = g:NERDTreeFileNode.GetSelected()
+    let path = treenode.path.str()
+
+    redraw!
+    echo 'calculating size...     ' . path
+    let result = system('du -d0 -h "' . path . '" | cut -f1')
+    let result = substitute(result, "[ \t\n\r]", '', 'g')
+
+    redraw!
+    echo result . '    ' . path
+endfunction
+
+
+" ============================================================
 " quit
 call s:setupModule('quit', 1, '(q)uit', 'q', 'NERDTreeQuitNode')
 function! NERDTreeQuitNode()
