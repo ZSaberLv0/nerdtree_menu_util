@@ -152,9 +152,14 @@ endfunction
 " ============================================================
 " run
 call s:setupModule('run', 1, '(r)un the node', 'r', 'NERDTreeRunNode')
-let s:haskdeinit = system("ps -e") =~ 'kdeinit'
-let s:hasdarwin = system("uname -s") =~ 'Darwin'
 function! NERDTreeRunNode()
+    if !exists('s:haskdeinit')
+        let s:haskdeinit = system("ps -e") =~ 'kdeinit'
+    endif
+    if !exists('s:hasdarwin')
+        let s:hasdarwin = system("uname -s") =~ 'Darwin'
+    endif
+
     let l:oldssl=&shellslash
     set noshellslash
     let treenode = g:NERDTreeFileNode.GetSelected()
