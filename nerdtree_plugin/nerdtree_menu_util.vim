@@ -53,6 +53,12 @@ function! NERDTreeCutNode()
     echo 'Cut node: ' . s:nmu_yanked_path
 endfunction
 function! NERDTreePasteNode()
+    let l:oldssl=&shellslash
+    set noshellslash
+    call s:NERDTreePasteNode()
+    let &shellslash=l:oldssl
+endfunction
+function! s:NERDTreePasteNode()
     if empty(s:nmu_yanked_path)
         redraw!
         echo 'Nothing yanked/cut'
