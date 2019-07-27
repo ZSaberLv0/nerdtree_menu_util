@@ -1,14 +1,3 @@
-" ============================================================================
-" File:        nerdtree_menu_util.vim
-" Description: plugin for NERD Tree that supply some utilities
-" Maintainer:  ZSaberLv0 <z@zsaber.com>
-" Last Change: 20171130
-" ============================================================================
-if exists("g:ZF_nerdtree_menu_util_loaded")
-    finish
-endif
-
-let g:ZF_nerdtree_menu_util_loaded = 1
 
 " ============================================================
 function! s:setupModule(module, enable, text, key, callback)
@@ -31,9 +20,9 @@ endfunction
 
 " ============================================================
 " yank/cut/paste
-call s:setupModule('yank', 1, '(y)ank the node', 'y', 'NERDTreeYankNode')
-call s:setupModule('cut', 1, '(x) cut the node', 'x', 'NERDTreeCutNode')
-call s:setupModule('paste', 1, '(p)aste yanked/cut node', 'p', 'NERDTreePasteNode')
+call s:setupModule('yank', 1, '(y)ank', 'y', 'NERDTreeYankNode')
+call s:setupModule('cut', 1, '(x) cut', 'x', 'NERDTreeCutNode')
+call s:setupModule('paste', 1, '(p)aste', 'p', 'NERDTreePasteNode')
 
 let s:nmu_yanked_node = {}
 let s:nmu_yanked_path = ''
@@ -132,7 +121,7 @@ endfunction
 
 " ============================================================
 " copypath
-call s:setupModule('copypath', 1, 'copy (n)ode path', 'n', 'NERDTreeCopyPath')
+call s:setupModule('copypath', 1, '(n)ode path', 'n', 'NERDTreeCopyPath')
 if !exists('g:nmu_copypath_registers')
     let g:nmu_copypath_registers = ['*', '"', '0']
 endif
@@ -157,7 +146,7 @@ endfunction
 
 " ============================================================
 " run
-call s:setupModule('run', 1, '(r)un the node', 'r', 'NERDTreeRunNode')
+call s:setupModule('run', 1, '(r)un', 'r', 'NERDTreeRunNode')
 function! NERDTreeRunNode()
     if !exists('s:haskdeinit')
         let s:haskdeinit = system("ps -e") =~ 'kdeinit'
@@ -195,8 +184,8 @@ endfunction
 
 
 " ============================================================
-" size
-call s:setupModule('size', 1, '(s)ize of the node', 's', 'NERDTreeNodeSize')
+" sizeof
+call s:setupModule('sizeof', 1, '(s)izeof', 's', 'NERDTreeNodeSize')
 function! NERDTreeNodeSize()
     let treenode = g:NERDTreeFileNode.GetSelected()
     let path = treenode.path.str()
