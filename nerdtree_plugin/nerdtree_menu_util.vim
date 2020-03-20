@@ -186,17 +186,33 @@ endfunction
 " ============================================================
 " sizeof
 call s:setupModule('sizeof', 1, '(s)izeof', 's', 'NERDTreeNodeSize')
+if !exists('g:nmu_sizeof_registers')
+    let g:nmu_sizeof_registers = ['*', '"', '0']
+endif
 function! NERDTreeNodeSize()
     let treenode = g:NERDTreeFileNode.GetSelected()
     let path = treenode.path.str()
 
     redraw!
     echo 'calculating size...     ' . path
-    let result = system('du -d0 -h "' . path . '" | cut -f1')
-    let result = substitute(result, "[ \t\n\r]", '', 'g')
+
+    let sizeFriendly = system('du -d0 -h "' . path . '" | cut -f1')
+    let sizeFriendly = substitute(sizeFriendly, "[ \t\n\r]", '', 'g')
+
+    let size = system('du -d0 -b "' . path . '" | cut -f1')
+    let size = substitute(size, "[ \t\n\r]", '', 'g')
+
+    for item in g:nmu_sizeof_registers
+        if item == '*'
+            if !has('clipboard')
+                continue
+            endif
+        endif
+        execute 'let @' . item . ' = "' . size . '"'
+    endfor
 
     redraw!
-    echo result . '    ' . path
+    echo sizeFriendly . ' : ' . size . ' : ' . path
 endfunction
 
 
