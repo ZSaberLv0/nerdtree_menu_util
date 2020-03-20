@@ -199,20 +199,28 @@ function! NERDTreeNodeSize()
     let sizeFriendly = system('du -d0 -h "' . path . '" | cut -f1')
     let sizeFriendly = substitute(sizeFriendly, "[ \t\n\r]", '', 'g')
 
-    let size = system('du -d0 -b "' . path . '" | cut -f1')
-    let size = substitute(size, "[ \t\n\r]", '', 'g')
+    if treenode.path.isDirectory
+        let hint = sizeFriendly
+    else
+        let size = system('wc -c "' . path . '"')
+        let size = substitute(size, "[\t\n\r]", ' ', 'g')
+        " ^ *([0-9]+) +.*$
+        let size = substitute(size, '^ *\([0-9]\+\) \+.*$', '\1', 'g')
 
-    for item in g:nmu_sizeof_registers
-        if item == '*'
-            if !has('clipboard')
-                continue
+        for item in g:nmu_sizeof_registers
+            if item == '*'
+                if !has('clipboard')
+                    continue
+                endif
             endif
-        endif
-        execute 'let @' . item . ' = "' . size . '"'
-    endfor
+            execute 'let @' . item . ' = "' . size . '"'
+        endfor
+
+        let hint = sizeFriendly . ' (' . size . ')'
+    endif
 
     redraw!
-    echo sizeFriendly . ' : ' . size . ' : ' . path
+    echo hint . '    ' . path
 endfunction
 
 
