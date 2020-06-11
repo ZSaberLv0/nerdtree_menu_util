@@ -8,6 +8,8 @@ recommended to instal via [Vundle](https://github.com/VundleVim/Vundle.vim):
 Plugin 'ZSaberLv0/nerdtree_menu_util'
 ```
 
+recommended to use this too: [ZSaberLv0/nerdtree_fs_menu](https://github.com/ZSaberLv0/nerdtree_fs_menu)
+
 # Config
 
 ```vim
