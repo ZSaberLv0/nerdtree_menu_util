@@ -56,7 +56,7 @@ function! s:NERDTreePasteNode()
 
     let curNode = g:NERDTreeFileNode.GetSelected()
     let dstPath = curNode.path.isDirectory ? curNode.path.str() : curNode.path.getParent().str()
-    let dstPath .= g:NERDTreePath.Slash() . fnamemodify(s:nmu_yanked_path, ':t')
+    let dstPath .= nerdtree#slash() . fnamemodify(s:nmu_yanked_path, ':t')
 
     if filereadable(dstPath)
         echohl ErrorMsg | echo 'Overwrite ' . dstPath . '? y/n: '  | echohl None
