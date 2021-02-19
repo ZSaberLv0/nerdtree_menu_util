@@ -2,13 +2,20 @@ Plugin for [NERDTree](https://github.com/scrooloose/nerdtree) that supply some u
 
 # Installation
 
-recommended to instal via [Vundle](https://github.com/VundleVim/Vundle.vim):
+use [Vundle](https://github.com/VundleVim/Vundle.vim) or any other plugin manager you like to install
 
 ```
+Plugin 'scrooloose/nerdtree'
 Plugin 'ZSaberLv0/nerdtree_menu_util'
-```
 
-recommended to use this too: [ZSaberLv0/nerdtree_fs_menu](https://github.com/ZSaberLv0/nerdtree_fs_menu)
+" optional, auto backup for destructive operations
+Plugin 'ZSaberLv0/ZFVimBackup'
+
+" optional, remove some useless builtin menu item to prevent key conflict
+Plugin 'ZSaberLv0/nerdtree_fs_menu'
+let g:loaded_nerdtree_exec_menuitem = 1
+let g:loaded_nerdtree_fs_menu = 1
+```
 
 # Config
 
@@ -24,6 +31,18 @@ let g:nmu_xxx_key = 'y'
 where `xxx` is the menu items listed below
 
 # Menu Items
+
+## mark
+
+mark/unmark multiple nodes for yank/cut/paste/delete
+
+default config: `(i) mark/unmark for yank/cut/paste/delete`
+
+## unmark
+
+unmark all for yank/cut/paste/delete
+
+default config: `(u)nmark all for yank/cut/paste/delete`
 
 ## yank
 
@@ -62,11 +81,18 @@ run the node by system default behavior
 
 default config: `(r)un the node`
 
-## size
+## sizeof
 
 print the file or dir's size
 
 default config: `(s)ize of the node`
+
+extra config:
+
+```vim
+" copy to which register
+let g:nmu_sizeof_registers = ['*', '"', '0']
+```
 
 ## quit
 
