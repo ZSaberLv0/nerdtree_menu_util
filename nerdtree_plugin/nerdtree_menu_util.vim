@@ -207,22 +207,41 @@ function! NERDTreeDeleteNode()
     redraw!
     let deleteCount = 0
     let confirmAll = 0
+    let needBackupState = 1
     for node in values(nmu_marked_nodes)
+        let needBackup = needBackupState
         if !confirmAll
             echo 'Delete node? ' . node.path.str()
             if len(nmu_marked_nodes) > 1
                 echo '  (a)ll'
+                if exists('*ZFBackupSave')
+                    echo '    (A)ll without backup'
+                endif
             endif
             echo '  (y)es'
+            if exists('*ZFBackupSave')
+                echo '    (Y)es without backup'
+            endif
             echo '  (n)o'
             echo 'choice: '
             let confirm = nr2char(getchar())
             redraw!
-            if confirm == 'a'
+            if confirm ==# 'a'
                 let confirmAll = 1
-            elseif confirm != 'y'
+                let needBackupState = 1
+            elseif confirm ==# 'A'
+                let confirmAll = 1
+                let needBackup = 0
+                let needBackupState = 0
+            elseif confirm ==# 'y'
+            elseif confirm ==# 'Y'
+                let needBackup = 0
+            else
                 continue
             endif
+        endif
+        if needBackup && !empty(node.path.str())
+            call s:tryBackup(node.path.str())
         endif
         if s:NERDTreeDeleteNode(node)
             let deleteCount += 1
@@ -235,7 +254,6 @@ function! s:NERDTreeDeleteNode(node)
     if empty(currentNode.path.str())
         return 0
     endif
-    call s:tryBackup(currentNode.path.str())
 
     try
         call currentNode.delete()
