@@ -80,15 +80,27 @@ function! s:prepareMark()
     if !exists('s:nmu_marked_nodes')
         let s:nmu_marked_nodes = {}
     endif
+
+    let node = g:NERDTreeFileNode.GetSelected()
+    let path = node.path.str()
     if empty(s:nmu_marked_nodes)
-        let node = g:NERDTreeFileNode.GetSelected()
-        let path = node.path.str()
         if empty(path)
             echo 'empty path'
             return 0
         endif
         let s:nmu_marked_nodes[path] = node
+    else
+        if !exists('s:nmu_marked_nodes[path]')
+            redraw!
+            echo 'there are other nodes marked'
+            echo 'please unmark previous, or move to marked nodes to operate:'
+            for p in keys(s:nmu_marked_nodes)
+                echo '    ' . p
+            endfor
+            return 0
+        endif
     endif
+
     return 1
 endfunction
 function! NERDTreeYankNode()
@@ -171,9 +183,7 @@ function! s:NERDTreePasteNode()
 
     redraw!
     echo pastedCount . ' files ' . (s:nmu_marked_is_cut ? 'moved' : 'copied') . ' to ' . dstPath
-    if s:nmu_marked_is_cut
-        unlet s:nmu_marked_nodes
-    endif
+    unlet s:nmu_marked_nodes
 endfunction
 function! s:promptToRenameBuffer(bufnum, msg, newFileName)
     echo a:msg
