@@ -175,7 +175,7 @@ function! s:NERDTreePasteNode()
                 endif
             endif
         catch /^NERDTree/
-            call nerdtree#echoWarning('Failed to ' . (s:nmu_marked_is_cut ? 'move' : 'copy') . ' node ' . s:nmu_yanked_path)
+            call nerdtree#echoWarning('Failed to ' . (s:nmu_marked_is_cut ? 'move' : 'copy') . ' node ' . join(keys(s:nmu_marked_nodes), ', '))
             continue
         endtry
         let pastedCount += 1
