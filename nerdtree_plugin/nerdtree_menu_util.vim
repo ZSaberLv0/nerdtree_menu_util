@@ -121,10 +121,14 @@ function! NERDTreeCutNode()
 endfunction
 
 function! NERDTreePasteNode()
-    let l:oldssl=&shellslash
-    set noshellslash
+    if exists('+shellslash')
+        let l:oldssl=&shellslash
+        set noshellslash
+    endif
     call s:NERDTreePasteNode()
-    let &shellslash=l:oldssl
+    if exists('+shellslash')
+        let &shellslash=l:oldssl
+    endif
 endfunction
 function! s:NERDTreePasteNode()
     if empty(get(s:, 'nmu_marked_nodes', {}))
@@ -349,8 +353,10 @@ function! NERDTreeRunNode()
         let s:hasdarwin = system("uname -s") =~ 'Darwin'
     endif
 
-    let l:oldssl=&shellslash
-    set noshellslash
+    if exists('+shellslash')
+        let l:oldssl=&shellslash
+        set noshellslash
+    endif
     let treenode = g:NERDTreeFileNode.GetSelected()
     let path = treenode.path.str()
 
@@ -372,7 +378,9 @@ function! NERDTreeRunNode()
     elseif has("win32") || has("win64")
         exe "silent !start explorer ".shellescape(path,1)
     end
-    let &shellslash=l:oldssl
+    if exists('+shellslash')
+        let &shellslash=l:oldssl
+    endif
     redraw!
 endfunction
 
