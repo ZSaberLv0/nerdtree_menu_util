@@ -85,13 +85,26 @@ default config: `(r)un the node`
 
 print the file or dir's size
 
-default config: `(s)ize of the node`
+default config: `siz(e)of the node`
 
 extra config:
 
 ```vim
 " copy to which register
 let g:nmu_sizeof_registers = ['*', '"', '0']
+```
+
+## shell
+
+run shell on node dir
+
+default config: `(s)hell`
+
+extra config:
+
+```vim
+" copy result to which register
+let g:nmu_shell_registers = ['t']
 ```
 
 ## quit

@@ -387,7 +387,7 @@ endfunction
 
 " ============================================================
 " sizeof
-call s:setupModule('sizeof', 1, '(s)izeof', 's', 'NERDTreeNodeSize')
+call s:setupModule('sizeof', 1, 'siz(e)of', 'e', 'NERDTreeNodeSize')
 function! NERDTreeNodeSize()
     let treenode = g:NERDTreeFileNode.GetSelected()
     let path = treenode.path.str()
@@ -420,6 +420,58 @@ function! NERDTreeNodeSize()
 
     redraw!
     echo hint . '    ' . path
+endfunction
+
+
+" ============================================================
+" shell
+call s:setupModule('shell', 1, '(s)hell', 's', 'NERDTreeRunShell')
+function! NERDTreeRunShell()
+    let treenode = g:NERDTreeFileNode.GetSelected()
+    let path = treenode.path.str()
+    if filereadable(path)
+        let path = fnamemodify(path, ':h')
+    endif
+
+    redraw!
+    call inputsave()
+    let cmd = input('shell to run: ')
+    call inputrestore()
+    if empty(cmd)
+        return
+    endif
+
+    NERDTreeClose
+    redraw!
+    if exists('*ZFAsyncRun')
+        call ZFAsyncRun({
+                    \   'jobCmd' : cmd,
+                    \   'jobCwd' : path,
+                    \   'onExit' : function('NERDTreeRunShell_onExit'),
+                    \ })
+    else
+        let result = system(printf('cd "%s" && %s', path, cmd))
+        for item in get(g:, 'nmu_shell_registers', ['t'])
+            if item == '*'
+                if !has('clipboard')
+                    continue
+                endif
+            endif
+            execute 'let @' . item . ' = "' . result . '"'
+        endfor
+        echo result
+    endif
+endfunction
+function! NERDTreeRunShell_onExit(jobStatus, ...)
+    let result = join(a:jobStatus['jobOutput'], "\n")
+    for item in get(g:, 'nmu_shell_registers', ['t'])
+        if item == '*'
+            if !has('clipboard')
+                continue
+            endif
+        endif
+        execute 'let @' . item . ' = "' . result . '"'
+    endfor
 endfunction
 
 
