@@ -334,7 +334,7 @@ function! NERDTreeCopyPath()
                 continue
             endif
         endif
-        execute 'let @' . item . ' = "' . src . '"'
+        execute 'let @' . item . ' = src'
     endfor
 
     redraw!
@@ -412,7 +412,7 @@ function! NERDTreeNodeSize()
                     continue
                 endif
             endif
-            execute 'let @' . item . ' = "' . size . '"'
+            execute 'let @' . item . ' = size'
         endfor
 
         let hint = sizeFriendly . ' (' . size . ')'
@@ -457,7 +457,7 @@ function! NERDTreeRunShell()
                     continue
                 endif
             endif
-            execute 'let @' . item . ' = "' . result . '"'
+            execute 'let @' . item . ' = result'
         endfor
         echo result
     endif
@@ -470,7 +470,7 @@ function! NERDTreeRunShell_onExit(jobStatus, ...)
                 continue
             endif
         endif
-        execute 'let @' . item . ' = "' . result . '"'
+        execute 'let @' . item . ' = result'
     endfor
 endfunction
 
