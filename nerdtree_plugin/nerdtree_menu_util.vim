@@ -532,21 +532,17 @@ function! NERDTreeRunCommandAction(cmd)
     let result = ''
     if exists('*execute')
         try
-            let result = execute(a:cmd, '')
+            call execute(a:cmd)
         catch
             let result = v:exception
         endtry
     else
         try
-            redir => result
             execute a:cmd
         catch
             let result = v:exception
-        finally
-            redir END
         endtry
     endif
-    redraw!
     let result = substitute(result, '^[\r\n]\+', '', '')
     return result
 endfunction
