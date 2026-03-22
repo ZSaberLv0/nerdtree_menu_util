@@ -435,7 +435,14 @@ function! NERDTreeRunShell()
 
     redraw!
     call inputsave()
-    let cmd = input('shell to run: ')
+    if exists('*ZFJobCmdComplete')
+        let excludeFirstCmd = get(g:, 'ZFJobCmdComplete_excludeFirstCmd', 1)
+        let g:ZFJobCmdComplete_excludeFirstCmd = 0
+        let cmd = input('shell to run: ', '', 'customlist,ZFJobCmdComplete')
+        let g:ZFJobCmdComplete_excludeFirstCmd = excludeFirstCmd
+    else
+        let cmd = input('shell to run: ')
+    endif
     call inputrestore()
     if empty(cmd)
         return
@@ -472,6 +479,76 @@ function! NERDTreeRunShell_onExit(jobStatus, ...)
         endif
         execute 'let @' . item . ' = result'
     endfor
+endfunction
+
+
+" ============================================================
+" command
+call s:setupModule('command', 1, '(S) command', 'S', 'NERDTreeRunCommand')
+function! NERDTreeRunCommand()
+    let treenode = g:NERDTreeFileNode.GetSelected()
+    let path = treenode.path.str()
+    if filereadable(path)
+        let path = fnamemodify(path, ':h')
+    endif
+
+    redraw!
+    call inputsave()
+    if exists('*ZFJobCmdComplete')
+        let excludeFirstCmd = get(g:, 'ZFJobCmdComplete_excludeFirstCmd', 1)
+        let completeVimCmd = get(g:, 'ZFJobCmdComplete_completeVimCmd', 0)
+        let g:ZFJobCmdComplete_excludeFirstCmd = 0
+        let g:ZFJobCmdComplete_completeVimCmd = 1
+        let cmd = input('command to run: ', '', 'customlist,ZFJobCmdComplete')
+        let g:ZFJobCmdComplete_excludeFirstCmd = excludeFirstCmd
+        let g:ZFJobCmdComplete_completeVimCmd = completeVimCmd
+    else
+        let cmd = input('shell to run: ')
+    endif
+    call inputrestore()
+    if empty(cmd)
+        return
+    endif
+
+    NERDTreeClose
+    redraw!
+
+    let pwd = getcwd()
+    execute 'cd ' . substitute(path, ' ', '\\ ', 'g')
+    let result = NERDTreeRunCommandAction(cmd)
+    execute 'cd ' . substitute(pwd, ' ', '\\ ', 'g')
+
+    for item in get(g:, 'nmu_shell_registers', ['t'])
+        if item == '*'
+            if !has('clipboard')
+                continue
+            endif
+        endif
+        execute 'let @' . item . ' = result'
+    endfor
+    echo result
+endfunction
+function! NERDTreeRunCommandAction(cmd)
+    let result = ''
+    if exists('*execute')
+        try
+            let result = execute(a:cmd, '')
+        catch
+            let result = v:exception
+        endtry
+    else
+        try
+            redir => result
+            execute a:cmd
+        catch
+            let result = v:exception
+        finally
+            redir END
+        endtry
+    endif
+    redraw!
+    let result = substitute(result, '^[\r\n]\+', '', '')
+    return result
 endfunction
 
 
