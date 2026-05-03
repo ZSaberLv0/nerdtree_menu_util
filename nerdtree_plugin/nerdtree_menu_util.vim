@@ -1,5 +1,15 @@
 
 " ============================================================
+function! NERDTreeRemoveMenuItem(callback)
+    let menuItems = g:NERDTreeMenuItem.All()
+    let i = len(menuItems) - 1
+    while i >= 0
+        if menuItems[i]['callback'] == a:callback
+            call remove(menuItems, i)
+        endif
+        let i -= 1
+    endwhile
+endfunction
 function! s:setupModule(module, enable, text, key, callback)
     if !exists('g:nmu_' . a:module . '_enable')
         execute 'let g:nmu_' . a:module . '_enable=' . a:enable
@@ -11,6 +21,7 @@ function! s:setupModule(module, enable, text, key, callback)
         execute 'let g:nmu_' . a:module . '_key="' . a:key . '"'
     endif
     if eval('g:nmu_' . a:module . '_enable')
+        call NERDTreeRemoveMenuItem(a:callback)
         call NERDTreeAddMenuItem({
                     \ 'text': eval('g:nmu_' . a:module . '_text'),
                     \ 'shortcut': eval('g:nmu_' . a:module . '_key'),
@@ -532,18 +543,24 @@ function! NERDTreeRunCommandAction(cmd)
     let result = ''
     if exists('*execute')
         try
-            call execute(a:cmd)
+            let result = execute(a:cmd)
         catch
             let result = v:exception
         endtry
     else
         try
+            redir => result
             execute a:cmd
         catch
             let result = v:exception
+        finally
+            redir END
         endtry
     endif
+    " ^[\r\n]+
     let result = substitute(result, '^[\r\n]\+', '', '')
+    " [\r\n]+$
+    let result = substitute(result, '[\r\n]\+$', '', '')
     return result
 endfunction
 
